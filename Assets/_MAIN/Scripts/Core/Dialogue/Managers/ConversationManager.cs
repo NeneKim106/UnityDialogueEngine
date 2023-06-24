@@ -54,15 +54,15 @@ namespace DIALOGUE {
 
         IEnumerator Line_RunDialogue(DIALOGUE_LINE line) {
             if (line.hasSpeaker)
-                dialogueSystem.ShowSpeakerName(line.speaker.displayName);
+                dialogueSystem.ShowSpeakerName(line.speakerData.displayName);
 
-            yield return BuildLineSegments(line.dialogue);
+            yield return BuildLineSegments(line.dialogueData);
 
             yield return waitForUserInput();
         }
 
         IEnumerator Line_RunCommands(DIALOGUE_LINE line) {
-            Debug.Log(line.commands);
+            Debug.Log(line.commandsData);
 
             yield return null;
         }
