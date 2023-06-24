@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace DIALOGUE {
     public class DIALOGUE_LINE {
-        public DL_SPEAKER_DATA speaker;
-        public DL_DIALOGUE_DATA dialogue;
-        public string commands;
+        public DL_SPEAKER_DATA speakerData;
+        public DL_DIALOGUE_DATA dialogueData;
+        public DL_COMMAND_DATA commandsData;
 
-        public bool hasSpeaker => speaker != null;
-        public bool hasDialogue => dialogue.hasDialogue;
-        public bool hasCommands => commands != string.Empty;
+        public bool hasSpeaker => speakerData != null;
+        public bool hasDialogue => dialogueData != null;
+        public bool hasCommands => commandsData != null;
         public DIALOGUE_LINE(string speaker, string dialogue, string commands) {
-            this.speaker = (string.IsNullOrEmpty(speaker) ? null : new DL_SPEAKER_DATA(speaker));
-            this.dialogue = new DL_DIALOGUE_DATA(dialogue);
-            this.commands = commands;
+            this.speakerData = (string.IsNullOrEmpty(speaker) ? null : new DL_SPEAKER_DATA(speaker));
+            this.dialogueData = (string.IsNullOrEmpty(dialogue) ? null : new DL_DIALOGUE_DATA(dialogue));
+            this.commandsData = (string.IsNullOrEmpty(commands) ? null : new DL_COMMAND_DATA(commands));
         }
     }
 }

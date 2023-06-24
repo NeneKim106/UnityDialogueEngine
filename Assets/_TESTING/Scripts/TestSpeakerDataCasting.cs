@@ -20,9 +20,9 @@ public class TestSpeakerDataCasting : MonoBehaviour {
 
             DIALOGUE_LINE dl = DialogueParser.Parse(line);
 
-            Debug.Log($"{dl.speaker.name} as [{(dl.speaker.castName != string.Empty ? dl.speaker.castName : dl.speaker.name)}] at {dl.speaker.castPosition}");
+            Debug.Log($"{dl.speakerData.name} as [{(dl.speakerData.castName != string.Empty ? dl.speakerData.castName : dl.speakerData.name)}] at {dl.speakerData.castPosition}");
 
-            List<(int l, string ex)> expr = dl.speaker.CastExpressions;
+            List<(int l, string ex)> expr = dl.speakerData.CastExpressions;
             for (int c = 0; c < expr.Count; c++) {
                 Debug.Log($"[Layer[{expr[c].l}] = '{expr[c].ex}']");
             }
