@@ -1,0 +1,10 @@
+
+print_1p("This is a command running straight from dialogue file")
+
+John "Move Left" moveCharDemo(left)
+
+"Move Right" moveCharDemo(right)
+
+"Move Left and then move right" [wait]moveCharDemo(left), moveCharDemo(right)
+
+"Move Left and then move right" print_1p("Start Moving"), [wait]moveCharDemo(left), [wait]moveCharDemo(right), print_1p("Done moving")
