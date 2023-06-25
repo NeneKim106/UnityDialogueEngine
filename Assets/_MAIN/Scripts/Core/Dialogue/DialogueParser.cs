@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DIALOGUE {
     public class DialogueParser {
-        private const string commandRegexPattern = @"\w*[^\s]\("; // word + not space + {
+        private const string commandRegexPattern = @"[\w\[\]]*[^\s]\(";
 
         public static DIALOGUE_LINE Parse(string rawLine) {
             Debug.Log($"Parsing line - '{rawLine}'");

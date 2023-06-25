@@ -42,12 +42,16 @@ namespace DIALOGUE {
                 }
                 DIALOGUE_LINE line = DialogueParser.Parse(conversation[i]);
 
+                if (line.hasDialogue) {
+                    yield return Line_RunDialogue(line);
+                }
+
                 if (line.hasCommands) {
                     yield return Line_RunCommands(line);
                 }
 
                 if (line.hasDialogue) {
-                    yield return Line_RunDialogue(line);
+                    yield return waitForUserInput();
                 }
             }
         }
@@ -57,12 +61,18 @@ namespace DIALOGUE {
                 dialogueSystem.ShowSpeakerName(line.speakerData.displayName);
 
             yield return BuildLineSegments(line.dialogueData);
-
-            yield return waitForUserInput();
         }
 
         IEnumerator Line_RunCommands(DIALOGUE_LINE line) {
-            Debug.Log(line.commandsData);
+            List<DL_COMMAND_DATA.Command> commands = line.commandsData.commands;
+
+            foreach (DL_COMMAND_DATA.Command command in commands) {
+                if (command.waitForCompletion) {
+                    yield return CommandManager.instance.Excute(command.name, command.arguments);
+                }
+
+                CommandManager.instance.Excute(command.name, command.arguments);
+            }
 
             yield return null;
         }
