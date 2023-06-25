@@ -43,14 +43,17 @@ namespace DIALOGUE {
 
             //Debug.Log(rawLine.Substring(dialogueStart + 1, (dialogueEnd - dialogueStart) - 1));
             Regex commandRegex = new Regex(commandRegexPattern);
-            Match match = commandRegex.Match(rawLine);
+            MatchCollection matches = commandRegex.Matches(rawLine);
             int commandStart = -1;
-            if (match.Success) {
-                commandStart = match.Index;
-
-                if (dialogueStart == -1 && dialogueEnd == -1) {
-                    return ("", "", rawLine.Trim());
+            foreach (Match match in matches) {
+                if (match.Index < dialogueStart || match.Index > dialogueEnd) {
+                    commandStart = match.Index;
+                    break;
                 }
+            }
+
+            if (commandStart != -1 && (dialogueStart == -1 && dialogueEnd == -1)) {
+                return ("", "", rawLine.Trim());
             }
 
             if (dialogueStart != -1 && dialogueEnd != -1 && (commandStart == -1 || commandStart > dialogueEnd)) {
