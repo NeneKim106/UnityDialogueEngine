@@ -28,11 +28,18 @@ public class CommandManager : MonoBehaviour {
         }
     }
 
-    public void Excute(string commandName) {
+    public void Excute(string commandName, params string[] args) {
         Delegate command = database.GetCommand(commandName);
 
-        if (command != null) {
+        if (command == null)
+            return;
+
+        if (command is Action) {
             command.DynamicInvoke();
+        } else if (command is Action<string>) {
+            command.DynamicInvoke(args[0]);
+        } else if (command is Action <string[]>) {
+            command.DynamicInvoke((object)args);
         }
     }
 }
