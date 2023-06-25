@@ -25,6 +25,9 @@ public class DL_COMMAND_DATA {
         foreach (string cmd in data) {
             Command command = new Command();
             int index = cmd.IndexOf(ARGUMENTSCONTAINER_ID);
+
+            if (index == -1)
+                continue;
             
             command.name = cmd.Substring(0, index).Trim();
             command.arguments = GetArgs(cmd.Substring(index + 1, cmd.Length - index -2));
