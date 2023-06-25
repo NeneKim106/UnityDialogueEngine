@@ -9,6 +9,10 @@ public class TestCommandDatabase : MonoBehaviour {
         CommandManager.instance.Excute("print");
         CommandManager.instance.Excute("print_1p", "Hello World");
         CommandManager.instance.Excute("print_mp", "Line 1", "Line 2", "Line 3");
+
+        CommandManager.instance.Excute("lambda");
+        CommandManager.instance.Excute("lambda_1p", "Hello World");
+        CommandManager.instance.Excute("lambda_mp", "Line 1", "Line 2", "Line 3");
     }
 
     void Update() {

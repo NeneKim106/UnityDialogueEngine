@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class CMD_DatabaseExtension_Example : CMD_DatabaseExtension {
@@ -11,6 +12,9 @@ public class CMD_DatabaseExtension_Example : CMD_DatabaseExtension {
         database.AddCommand("print_mp", new Action<string[]>(PrintLines));
 
         // Add lambda with no parameters
+        database.AddCommand("lambda", new Action(() => { Debug.Log("printing a defualt message to console from lambda command."); }));
+        database.AddCommand("lambda_1p", new Action<string>((arg) => { Debug.Log($"Log User Lambda Message: '{arg}'."); }));
+        database.AddCommand("lambda_mp", new Action<string[]>((arg) => { Debug.Log(string.Join(", ", arg)); }));
 
         // Add coroutine with no parameters
     }
