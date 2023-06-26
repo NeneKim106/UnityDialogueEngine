@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using DIALOGUE;
 
-public class TestCommandFile : MonoBehaviour {
-    [SerializeField] private TextAsset fileToLoad = null;
+namespace TESTING {
+    public class TestCommandFile : MonoBehaviour {
+        [SerializeField] private TextAsset fileToLoad = null;
 
-    // Start is called before the first frame update
-    void Start() {
-        StartConversation();
-    }
+        // Start is called before the first frame update
+        void Start() {
+            StartConversation();
+        }
 
-    void StartConversation() {
-        List<string> lines = FileManager.ReadTextAsset(fileToLoad, false);
+        void StartConversation() {
+            List<string> lines = FileManager.ReadTextAsset(fileToLoad, false);
 
-        DialogueSystem.instance.Say(lines);
+            DialogueSystem.instance.Say(lines);
+        }
     }
 }
