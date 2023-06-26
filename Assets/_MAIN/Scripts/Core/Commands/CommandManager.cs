@@ -1,80 +1,81 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.Reflection;
 using System.Linq;
 using System;
 
-public class CommandManager : MonoBehaviour {
-    public static CommandManager instance { get; private set; }
-    private static Coroutine process = null;
-    public static bool isRunningProcess => process != null;
+namespace COMMANDS {
+    public class CommandManager : MonoBehaviour {
+        public static CommandManager instance { get; private set; }
+        private static Coroutine process = null;
+        public static bool isRunningProcess => process != null;
 
-    private CommendDatabase database;
+        private CommendDatabase database;
 
-    private void Awake() {
-        if (instance == null) {
-            instance = this;
+        private void Awake() {
+            if (instance == null) {
+                instance = this;
 
-            database = new CommendDatabase();
+                database = new CommendDatabase();
 
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            Type[] extensionTypes = assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(CMD_DatabaseExtension))).ToArray();
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                Type[] extensionTypes = assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(CMD_DatabaseExtension))).ToArray();
 
-            foreach (Type extension in extensionTypes) {
-                MethodInfo extendMethod = extension.GetMethod("Extend");
-                extendMethod.Invoke(null, new object[] { database });
+                foreach (Type extension in extensionTypes) {
+                    MethodInfo extendMethod = extension.GetMethod("Extend");
+                    extendMethod.Invoke(null, new object[] { database });
+                }
+            } else {
+                DestroyImmediate(gameObject);
             }
-        } else {
-            DestroyImmediate(gameObject);
-        }
-    }
-
-    public Coroutine Excute(string commandName, params string[] args) {
-        Delegate command = database.GetCommand(commandName);
-
-        if (command == null) {
-            return null;
         }
 
-        return StartProcess(commandName, command, args);
-    }
+        public Coroutine Excute(string commandName, params string[] args) {
+            Delegate command = database.GetCommand(commandName);
 
-    private Coroutine StartProcess(string commandName, Delegate command, string[] args) {
-        StopCurrentProcess();
+            if (command == null) {
+                return null;
+            }
 
-        process = StartCoroutine(RunningProcess(command, args));
-
-        return process;
-    }
-
-    private void StopCurrentProcess() {
-        if (process != null) {
-            StopCoroutine(process);
+            return StartProcess(commandName, command, args);
         }
 
-        process = null;
-    }
+        private Coroutine StartProcess(string commandName, Delegate command, string[] args) {
+            StopCurrentProcess();
 
-    private IEnumerator RunningProcess(Delegate command, string[] args) {
-        yield return WaitForProcessToComplete(command, args);
+            process = StartCoroutine(RunningProcess(command, args));
 
-        process = null;
-    }
+            return process;
+        }
 
-    private IEnumerator WaitForProcessToComplete(Delegate command, string[] args) {
-        if (command is Action) {
-            command.DynamicInvoke();
-        } else if (command is Action<string>) {
-            command.DynamicInvoke(args[0]);
-        } else if (command is Action < string[]>) {
-            command.DynamicInvoke((object)args);
-        } else if (command is Func<IEnumerator>) {
-            yield return ((Func<IEnumerator>)command)();
-        } else if (command is Func<string, IEnumerator>) {
-            yield return ((Func<string, IEnumerator>)command)(args[0]);
-        } else if (command is Func<string[], IEnumerator>) {
-            yield return ((Func<string[], IEnumerator>)command)(args);
+        private void StopCurrentProcess() {
+            if (process != null) {
+                StopCoroutine(process);
+            }
+
+            process = null;
+        }
+
+        private IEnumerator RunningProcess(Delegate command, string[] args) {
+            yield return WaitForProcessToComplete(command, args);
+
+            process = null;
+        }
+
+        private IEnumerator WaitForProcessToComplete(Delegate command, string[] args) {
+            if (command is Action) {
+                command.DynamicInvoke();
+            } else if (command is Action<string>) {
+                command.DynamicInvoke(args[0]);
+            } else if (command is Action<string[]>) {
+                command.DynamicInvoke((object)args);
+            } else if (command is Func<IEnumerator>) {
+                yield return ((Func<IEnumerator>)command)();
+            } else if (command is Func<string, IEnumerator>) {
+                yield return ((Func<string, IEnumerator>)command)(args[0]);
+            } else if (command is Func<string[], IEnumerator>) {
+                yield return ((Func<string[], IEnumerator>)command)(args);
+            }
         }
     }
 }
