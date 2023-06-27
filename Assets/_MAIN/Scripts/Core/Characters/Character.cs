@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DIALOGUE;
+using TMPro;
 using UnityEngine;
 
 namespace CHARACTERS {
@@ -22,10 +23,21 @@ namespace CHARACTERS {
 
         public Coroutine Say(List<string> dialogue) {
             dialogueSystem.ShowSpeakerName(displayName);
-            dialogueSystem.ApplySpeakerDataToDialogueContainer(name);
+            UpdateTextCustomizationOnScreen();
 
             return dialogueSystem.Say(dialogue);
         }
+        public void UpdateTextCustomizationOnScreen() => dialogueSystem.ApplySpeakerDataToDialogueContainer(config);
+
+        public void SetNameColor(Color color) => config.nameColor = color;
+        
+        public void SetDialogueColor(Color color) => config.dialogueColor = color;
+
+        public void SetNameFont(TMP_FontAsset font) => config.nameFont = font;
+
+        public void SetDialogueFont(TMP_FontAsset font) => config.dialogueFont = font;
+
+        public void ResetConfigurationData() => config = CharacterManager.instance.GetCharacterConfigData(name);
 
         public enum CharacterType {
             Text,

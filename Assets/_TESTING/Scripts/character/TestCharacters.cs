@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CHARACTERS;
+using TMPro;
 
 namespace TESTING {
     public class TestCharacters : MonoBehaviour {
+        public TMP_FontAsset tempFont;
+
         // Start is called before the first frame update
         void Start() {          
             StartCoroutine(Test());
@@ -21,6 +24,17 @@ namespace TESTING {
                 "\"What's your name?\"",
                 "\"Oh,{wa 1} that's very nice.\""
             };
+            yield return Elen.Say(lines);
+
+            Elen.SetNameColor(Color.red);
+            Elen.SetDialogueColor(Color.green);
+            Elen.SetNameFont(tempFont);
+            Elen.SetDialogueFont(tempFont);
+
+            yield return Elen.Say(lines);
+
+            Elen.ResetConfigurationData();
+
             yield return Elen.Say(lines);
 
             lines = new List<string>() {
