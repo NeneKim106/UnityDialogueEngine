@@ -21,10 +21,12 @@ namespace DIALOGUE {
             userprompt = true;
         }
 
-        public void StartConversation(List<string> conversation) {
+        public Coroutine StartConversation(List<string> conversation) {
             StopConversation();
 
             process = dialogueSystem.StartCoroutine(RunningConversation(conversation));
+
+            return process;
         }
 
         public void StopConversation() {
@@ -58,8 +60,9 @@ namespace DIALOGUE {
         }
 
         IEnumerator Line_RunDialogue(DIALOGUE_LINE line) {
-            if (line.hasSpeaker)
+            if (line.hasSpeaker) {
                 dialogueSystem.ShowSpeakerName(line.speakerData.displayName);
+            }
 
             yield return BuildLineSegments(line.dialogueData);
         }
