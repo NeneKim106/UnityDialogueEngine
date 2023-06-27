@@ -60,8 +60,9 @@ namespace DIALOGUE {
         }
 
         IEnumerator Line_RunDialogue(DIALOGUE_LINE line) {
-            if (line.hasSpeaker)
+            if (line.hasSpeaker) {
                 dialogueSystem.ShowSpeakerName(line.speakerData.displayName);
+            }
 
             yield return BuildLineSegments(line.dialogueData);
         }

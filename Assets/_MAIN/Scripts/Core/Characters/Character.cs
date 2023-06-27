@@ -8,18 +8,21 @@ namespace CHARACTERS {
         public string name = "";
         public string displayName = "";
         public RectTransform root = null;
+        public CharacterConfigData config;
 
         public DialogueSystem dialogueSystem => DialogueSystem.instance;
 
-        public Character(string name) {
+        public Character(string name, CharacterConfigData config) {
             this.name = name;
             displayName = name;
+            this.config = config;
         }
 
         public Coroutine Say(string dialogue) => Say(new List<string> { dialogue });
 
         public Coroutine Say(List<string> dialogue) {
             dialogueSystem.ShowSpeakerName(displayName);
+            dialogueSystem.ApplySpeakerDataToDialogueContainer(name);
 
             return dialogueSystem.Say(dialogue);
         }

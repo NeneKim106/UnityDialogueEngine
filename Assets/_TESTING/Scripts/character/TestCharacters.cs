@@ -13,7 +13,7 @@ namespace TESTING {
         IEnumerator Test() {
             Character Elen = CharacterManager.instance.CreatCharacter("Elen");
             Character Adam = CharacterManager.instance.CreatCharacter("Adam");
-            Character Serah = CharacterManager.instance.CreatCharacter("Serah");
+            Character Ben = CharacterManager.instance.CreatCharacter("Benjamin");
 
             List<string> lines = new List<string>() {
                 "\"Hi, there.\"",
@@ -29,7 +29,7 @@ namespace TESTING {
             };
             yield return Adam.Say(lines);
 
-            yield return Serah.Say("\"This is a line that I want to say.{a} It is a simple line.\"");
+            yield return Ben.Say("\"This is a line that I want to say.{a} It is a simple line.\"");
 
             Debug.Log("Finished");
         }

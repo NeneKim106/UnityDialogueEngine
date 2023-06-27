@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using CHARACTERS;
 
 namespace DIALOGUE {
     public class DialogueSystem : MonoBehaviour {
@@ -39,6 +40,20 @@ namespace DIALOGUE {
 
             architect = new TextArchitect(dialogueContainer.dialogText);
             conversationManager = new ConversationManager(architect);
+        }
+
+        public void ApplySpeakerDataToDialogueContainer(string speakerName) {
+            Character character = CharacterManager.instance.GetCharacter(speakerName);
+            CharacterConfigData config = character != null ? character.config : CharacterManager.instance.GetCharacterConfigData(speakerName);
+
+            ApplySpeakerDataToDialogueContainer(config);
+        }
+
+        public void ApplySpeakerDataToDialogueContainer(CharacterConfigData config) {
+            dialogueContainer.SetDialogueColor(config.dialogueColor);
+            dialogueContainer.SetDialogueFont(config.dialogueFont);
+            dialogueContainer.nameContainer.SetNameColor(config.nameColor);
+            dialogueContainer.nameContainer.SetNameFont(config.nameFont);
         }
 
         public void ShowSpeakerName(string speakerName = "") {
