@@ -21,7 +21,8 @@ namespace TESTING {
         IEnumerator Test() {
             Character Chisato = CharacterManager.instance.CreatCharacter("Chisato");
 
-            //yield return Chisato.Hide();
+            yield return new WaitForSeconds(1);
+            
             yield return Chisato.Show();
             yield return Chisato.Say("¾È³É");
         }

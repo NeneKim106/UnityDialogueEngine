@@ -7,6 +7,8 @@ namespace CHARACTERS {
         private CanvasGroup rootCG => root.GetComponent<CanvasGroup>();
 
         public Character_Sprite(string name, CharacterConfigData config, GameObject prefab) : base(name, config, prefab) {
+            rootCG.alpha = 0;
+            
             Debug.Log($"Created Sprite Character: '{name}'");
         }
 
