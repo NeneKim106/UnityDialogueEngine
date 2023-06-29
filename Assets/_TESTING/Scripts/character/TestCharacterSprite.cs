@@ -32,8 +32,8 @@ namespace TESTING {
             Sprite chisatoBodySprite = Chisato.GetSprite("1");
             Sprite chisatoAccesorySprite = Chisato.GetSprite("star 1");
 
-            Chisato.SetSprite(chisatoBodySprite, 0);
-            Chisato.SetSprite(chisatoAccesorySprite, 1);
+            Chisato.SetSprite(chisatoBodySprite, layer:1);
+            Chisato.SetSprite(chisatoAccesorySprite, layer:0);
             Chisato.SetPosition(new Vector2(0.5f, 0));
 
             Sprite raelinBody = Raelin.GetSprite("B2");
