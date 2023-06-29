@@ -31,13 +31,13 @@ namespace CHARACTERS {
             if (characters.ContainsKey(characterName.ToLower())) {
                 return characters[characterName.ToLower()];
             } else if (createIfDoesNotExist) {
-                return CreatCharacter(characterName);
+                return CreateCharacter(characterName);
             }
 
             return null;
         }
 
-        public Character CreatCharacter(string characterName) {
+        public Character CreateCharacter(string characterName) {
             if (characters.ContainsKey(characterName.ToLower())) {
                 Debug.LogWarning($"A Character called '{characterName}' already exists. Did not create the character");
                 return null;
@@ -60,6 +60,7 @@ namespace CHARACTERS {
             result.castingName = nameData.Length > 1 ? nameData[1] : result.name;
             result.config = config.GetConfig(result.castingName);
             result.prefab = GetPrefabForCharacter(result.castingName);
+            result.rootCharacterFoler = FormatCharacterPath(characterRootPathFormat, result.castingName);
 
             return result;
         }
@@ -79,11 +80,11 @@ namespace CHARACTERS {
                     return new Character_Text(info.name, config);
                 case Character.CharacterType.Sprite:
                 case Character.CharacterType.SpriteSheet:
-                    return new Character_Sprite(info.name, config, info.prefab);
+                    return new Character_Sprite(info.name, config, info.prefab, info.rootCharacterFoler);
                 case Character.CharacterType.Live2D:
-                    return new Character_Live2D(info.name, config, info.prefab);
+                    return new Character_Live2D(info.name, config, info.prefab, info.rootCharacterFoler);
                 case Character.CharacterType.Model3D:
-                    return new Character_Model3D(info.name, config, info.prefab);
+                    return new Character_Model3D(info.name, config, info.prefab, info.rootCharacterFoler);
                 default:
                     return null;
             }
@@ -92,6 +93,8 @@ namespace CHARACTERS {
         private class CHARACTER_INFO {
             public string name = "";
             public string castingName = "";
+
+            public string rootCharacterFoler = "";
 
             public CharacterConfigData config = null;
 

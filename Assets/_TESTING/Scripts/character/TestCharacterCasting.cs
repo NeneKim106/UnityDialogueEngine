@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class TestCharacterCasting : MonoBehaviour {
     public TMP_FontAsset tempFont;
-    private Character CreatCharacter(string name) => CharacterManager.instance.CreatCharacter(name);
+    private Character CreatCharacter(string name) => CharacterManager.instance.CreateCharacter(name);
 
     // Start is called before the first frame update
     void Start() {
