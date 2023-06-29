@@ -14,9 +14,9 @@ namespace TESTING {
         }
 
         IEnumerator Test() {
-            Character Elen = CharacterManager.instance.CreatCharacter("Elen");
-            Character Adam = CharacterManager.instance.CreatCharacter("Adam");
-            Character Ben = CharacterManager.instance.CreatCharacter("Benjamin");
+            Character Elen = CharacterManager.instance.CreateCharacter("Elen");
+            Character Adam = CharacterManager.instance.CreateCharacter("Adam");
+            Character Ben = CharacterManager.instance.CreateCharacter("Benjamin");
 
             List<string> lines = new List<string>() {
                 "Hi, there.",

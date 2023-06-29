@@ -43,14 +43,14 @@ MonoBehaviour:
     dialogueFont: {fileID: 11400000, guid: 87ad92e7e53257440bbbffded7cc255c, type: 2}
   - name: Raelin
     alias: r
-    charaterType: 1
+    charaterType: 2
     nameColor: {r: 1, g: 1, b: 1, a: 1}
     dialogueColor: {r: 1, g: 1, b: 1, a: 1}
     nameFont: {fileID: 11400000, guid: 87ad92e7e53257440bbbffded7cc255c, type: 2}
     dialogueFont: {fileID: 11400000, guid: 87ad92e7e53257440bbbffded7cc255c, type: 2}
   - name: Generic
     alias: gen
-    charaterType: 1
+    charaterType: 2
     nameColor: {r: 1, g: 1, b: 1, a: 1}
     dialogueColor: {r: 1, g: 1, b: 1, a: 1}
     nameFont: {fileID: 11400000, guid: 87ad92e7e53257440bbbffded7cc255c, type: 2}

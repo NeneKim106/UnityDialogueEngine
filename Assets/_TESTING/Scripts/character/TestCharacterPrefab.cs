@@ -19,7 +19,7 @@ namespace TESTING {
         }
 
         IEnumerator Test() {
-            Character Chisato = CharacterManager.instance.CreatCharacter("Chisato");
+            Character Chisato = CharacterManager.instance.CreateCharacter("Chisato");
 
             yield return new WaitForSeconds(1);
             
