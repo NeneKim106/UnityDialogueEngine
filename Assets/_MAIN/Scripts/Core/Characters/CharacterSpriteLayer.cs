@@ -116,6 +116,15 @@ namespace CHARACTERS {
             return co_chaingingColor;
         }
 
+        public void StopChaningColor() {
+            if (!isChaningColor)
+                return;
+
+            characterManager.StopCoroutine(co_chaingingColor);
+
+            co_chaingingColor = null;
+        }
+
         private IEnumerator ChangingColor(Color color, float speedMultiplier) {
             Color oldColor = renderer.color;
             List<Image> oldImages = new List<Image>();

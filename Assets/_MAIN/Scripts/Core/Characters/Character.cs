@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using DIALOGUE;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace CHARACTERS {
     public abstract class Character {
         public const bool ENABLE_ON_START = true;
+        private const float UNHIGHLIGHTING_DARKEN_STRENTH = 0.65f;
 
         public string name = "";
         public string displayName = "";
@@ -14,6 +16,10 @@ namespace CHARACTERS {
         public CharacterConfigData config;
         public Animator animator;
         public Color color { get; protected set; } = Color.white;
+        public Color displayColor => highlighted ? highlightingColor : unhighlightingColor;
+        protected Color highlightingColor => color;
+        protected Color unhighlightingColor => new Color(color.r * UNHIGHLIGHTING_DARKEN_STRENTH, color.g * UNHIGHLIGHTING_DARKEN_STRENTH, color.b * UNHIGHLIGHTING_DARKEN_STRENTH, color.a);
+        public bool highlighted { get; protected set; } = true;
 
         protected CharacterManager characterManager = CharacterManager.instance;
         public DialogueSystem dialogueSystem => DialogueSystem.instance;
@@ -21,10 +27,13 @@ namespace CHARACTERS {
         protected Coroutine co_revealing, co_hiding;
         protected Coroutine co_moving;
         protected Coroutine co_changingColor;
+        protected Coroutine co_highlighting;
         public bool isRevealing => co_revealing != null;
         public bool isHiding => co_hiding != null;
         public bool isMoving => co_moving != null;
         public bool isChaingColor => co_changingColor != null;
+        public bool isHighlighting => (highlighted && co_highlighting != null);
+        public bool isUnHighlighting => (!highlighted && co_highlighting != null);
         public virtual bool isVisible { get; set; }
             
         public Character(string name, CharacterConfigData config, GameObject prefab) {
@@ -157,13 +166,44 @@ namespace CHARACTERS {
             if (isChaingColor)
                 characterManager.StopCoroutine(co_changingColor);
 
-            co_changingColor = characterManager.StartCoroutine(ChangingColor(color, speed));
+            co_changingColor = characterManager.StartCoroutine(ChangingColor(displayColor, speed));
 
             return co_changingColor;
         }
 
         public virtual IEnumerator ChangingColor(Color color, float speed) {
             Debug.Log("Color changing is not applicable on this character type");
+            yield return null;
+        }
+
+        public Coroutine Highlight(float speed = 1f) {
+            if (isHighlighting)
+                return co_highlighting;
+
+            if (isUnHighlighting)
+                characterManager.StopCoroutine(co_highlighting);
+
+            highlighted = true;
+            co_highlighting = characterManager.StartCoroutine(Highlighting(highlighted, speed));
+
+            return co_highlighting;
+        }
+
+        public Coroutine UnHighlight(float speed = 1f) {
+            if (isUnHighlighting)
+                return co_highlighting;
+
+            if (isHighlighting)
+                characterManager.StopCoroutine(co_highlighting);
+
+            highlighted = false;
+            co_highlighting = characterManager.StartCoroutine(Highlighting(highlighted, speed));
+
+            return co_highlighting;
+        }
+
+        public virtual IEnumerator Highlighting(bool highlighted, float speedMultiplier) {
+            Debug.Log("Highlighting is not applicable on this character type");
             yield return null;
         }
 
