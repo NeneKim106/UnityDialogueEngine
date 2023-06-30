@@ -19,8 +19,10 @@ namespace CHARACTERS {
 
         private Coroutine co_transitioningLayer = null;
         private Coroutine co_levelingAlpha = null;
+        private Coroutine co_chaingingColor = null;
         public bool isTransitioningLayer => co_transitioningLayer != null;
         public bool isLevelingAlpha => co_levelingAlpha != null;
+        public bool isChaningColor => co_chaingingColor != null;
 
         public CharacterSpriteLayer(Image defalutRenderer, int layer = 0) {
             renderer = defalutRenderer;
@@ -95,6 +97,47 @@ namespace CHARACTERS {
             }
 
             co_transitioningLayer = null;
+        }
+
+        public void SetColor(Color color) {
+            renderer.color = color;
+
+            foreach (CanvasGroup oldCG in oldRenderers) {
+                oldCG.GetComponent<Image>().color = color;
+            }
+        }
+
+        public Coroutine TransitionColor(Color color, float speed) {
+            if (isChaningColor)
+                characterManager.StopCoroutine(co_chaingingColor);
+
+            co_chaingingColor = characterManager.StartCoroutine(ChangingColor(color, speed));
+
+            return co_chaingingColor;
+        }
+
+        private IEnumerator ChangingColor(Color color, float speedMultiplier) {
+            Color oldColor = renderer.color;
+            List<Image> oldImages = new List<Image>();
+
+            foreach (var oldCG in oldRenderers) {
+                oldImages.Add(oldCG.GetComponent<Image>());
+            }
+
+            float colorPercent = 0;
+            while (colorPercent < 1) {
+                colorPercent += DEFAULT_TRANSITION_SPEED * speedMultiplier * Time.deltaTime;
+
+                renderer.color = Color.Lerp(oldColor, color, colorPercent);
+
+                foreach (Image oldImage in oldImages) {
+                    oldImage.color = renderer.color;
+                }
+
+                yield return null;
+            }
+
+            co_chaingingColor = null;
         }
     }
 }
