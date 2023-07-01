@@ -20,9 +20,12 @@ namespace CHARACTERS {
         private Coroutine co_transitioningLayer = null;
         private Coroutine co_levelingAlpha = null;
         private Coroutine co_chaingingColor = null;
+        private Coroutine co_flipping = null;
+        private bool isFacingLeft = Character.DEFAULT_ORIENTATION_IS_FACING_LEFT;
         public bool isTransitioningLayer => co_transitioningLayer != null;
         public bool isLevelingAlpha => co_levelingAlpha != null;
         public bool isChaningColor => co_chaingingColor != null;
+        public bool isFlipping => co_flipping != null;
 
         public CharacterSpriteLayer(Image defalutRenderer, int layer = 0) {
             renderer = defalutRenderer;
@@ -53,7 +56,7 @@ namespace CHARACTERS {
 
             yield return TryStartLevelingAlpha();
 
-            co_levelingAlpha = null;
+            co_transitioningLayer = null;
         }
 
         private Image CreateRenderer(Transform parent) {
@@ -96,7 +99,7 @@ namespace CHARACTERS {
                 yield return null;
             }
 
-            co_transitioningLayer = null;
+            co_levelingAlpha = null;
         }
 
         public void SetColor(Color color) {
@@ -147,6 +150,48 @@ namespace CHARACTERS {
             }
 
             co_chaingingColor = null;
+        }
+
+        public Coroutine FaceLeft(float speed = 1, bool immediate = false) {
+            if (isFlipping)
+                characterManager.StopCoroutine(co_flipping);
+
+            isFacingLeft = true;
+            co_flipping = characterManager.StartCoroutine(FaceDirection(isFacingLeft, speed, immediate));
+
+            return co_flipping;
+        }
+
+        public Coroutine FaceRight(float speed = 1, bool immediate = false) {
+            if (isFlipping)
+                characterManager.StopCoroutine(co_flipping);
+
+            isFacingLeft = false;
+            co_flipping = characterManager.StartCoroutine(FaceDirection(isFacingLeft, speed, immediate));
+
+            return co_flipping;
+        }
+
+        private IEnumerator FaceDirection(bool faceLeft, float speedMultiplier, bool immediate = false) {
+            float xScale = faceLeft ? 1 : -1;
+            Vector3 newScale = new Vector3(xScale, 1, 1);
+
+            if (!immediate) {
+                Image newRenderer = CreateRenderer(renderer.transform.parent);
+
+                newRenderer.transform.localScale = newScale;
+
+                transitionSpeedMultiplier = speedMultiplier;
+                TryStartLevelingAlpha();
+
+                while (isLevelingAlpha) {
+                    yield return null;
+                }
+            } else {
+                renderer.transform.localScale = newScale;
+            }
+
+            co_flipping = null;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace CHARACTERS {
     public abstract class Character {
         public const bool ENABLE_ON_START = true;
         private const float UNHIGHLIGHTING_DARKEN_STRENTH = 0.65f;
+        public const bool DEFAULT_ORIENTATION_IS_FACING_LEFT = true;
 
         public string name = "";
         public string displayName = "";
@@ -20,6 +21,8 @@ namespace CHARACTERS {
         protected Color highlightingColor => color;
         protected Color unhighlightingColor => new Color(color.r * UNHIGHLIGHTING_DARKEN_STRENTH, color.g * UNHIGHLIGHTING_DARKEN_STRENTH, color.b * UNHIGHLIGHTING_DARKEN_STRENTH, color.a);
         public bool highlighted { get; protected set; } = true;
+        protected bool facingLeft = DEFAULT_ORIENTATION_IS_FACING_LEFT;
+        public int priority { get; protected set; }
 
         protected CharacterManager characterManager = CharacterManager.instance;
         public DialogueSystem dialogueSystem => DialogueSystem.instance;
@@ -28,6 +31,7 @@ namespace CHARACTERS {
         protected Coroutine co_moving;
         protected Coroutine co_changingColor;
         protected Coroutine co_highlighting;
+        protected Coroutine co_flipping;
         public bool isRevealing => co_revealing != null;
         public bool isHiding => co_hiding != null;
         public bool isMoving => co_moving != null;
@@ -35,7 +39,10 @@ namespace CHARACTERS {
         public bool isHighlighting => (highlighted && co_highlighting != null);
         public bool isUnHighlighting => (!highlighted && co_highlighting != null);
         public virtual bool isVisible { get; set; }
-            
+        public bool isFacingLeft => facingLeft;
+        public bool isFacingRight => !facingLeft;
+        public bool isFlipping => co_flipping != null;
+
         public Character(string name, CharacterConfigData config, GameObject prefab) {
             this.name = name;
             displayName = name;
@@ -205,6 +212,51 @@ namespace CHARACTERS {
         public virtual IEnumerator Highlighting(bool highlighted, float speedMultiplier) {
             Debug.Log("Highlighting is not applicable on this character type");
             yield return null;
+        }
+
+        public Coroutine Flip(float speed = 1, bool immediate = false) {
+            if (isFacingLeft)
+                return FaceRight(speed, immediate);
+            else
+                return FaceLeft(speed, immediate);
+        }
+
+        public Coroutine FaceLeft(float speed = 1, bool immediate = false) {
+            Debug.Log($"name: {displayName} is facingLeft...");
+
+            if (isFlipping) {
+                characterManager.StopCoroutine(co_flipping);
+            }
+
+            facingLeft = true;
+            co_flipping = characterManager.StartCoroutine(FaceDirection(facingLeft, speed, immediate));
+
+            return co_flipping;
+        }
+
+        public Coroutine FaceRight(float speed = 1, bool immediate = false) {
+            Debug.Log($"name: {displayName} is facingRight...");
+
+            if (isFlipping) {
+                characterManager.StopCoroutine(co_flipping);
+            }
+
+            facingLeft = false;
+            co_flipping = characterManager.StartCoroutine(FaceDirection(facingLeft, speed, immediate));
+
+            return co_flipping;
+        }
+
+        public virtual IEnumerator FaceDirection(bool faceLeft, float speedMultiplier, bool immediate) {
+            Debug.Log("Cannot flip a charater of this type.");
+            yield return null;
+        }
+
+        public void SetPriority(int priority, bool autoSortCharacterOnUI = true) {
+            this.priority = priority;
+
+            if (autoSortCharacterOnUI)
+                characterManager.SortCharacter();
         }
 
         public enum CharacterType {
