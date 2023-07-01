@@ -22,6 +22,7 @@ namespace CHARACTERS {
         protected Color unhighlightingColor => new Color(color.r * UNHIGHLIGHTING_DARKEN_STRENTH, color.g * UNHIGHLIGHTING_DARKEN_STRENTH, color.b * UNHIGHLIGHTING_DARKEN_STRENTH, color.a);
         public bool highlighted { get; protected set; } = true;
         protected bool facingLeft = DEFAULT_ORIENTATION_IS_FACING_LEFT;
+        public int priority { get; protected set; }
 
         protected CharacterManager characterManager = CharacterManager.instance;
         public DialogueSystem dialogueSystem => DialogueSystem.instance;
@@ -41,7 +42,7 @@ namespace CHARACTERS {
         public bool isFacingLeft => facingLeft;
         public bool isFacingRight => !facingLeft;
         public bool isFlipping => co_flipping != null;
-            
+
         public Character(string name, CharacterConfigData config, GameObject prefab) {
             this.name = name;
             displayName = name;
@@ -249,6 +250,13 @@ namespace CHARACTERS {
         public virtual IEnumerator FaceDirection(bool faceLeft, float speedMultiplier, bool immediate) {
             Debug.Log("Cannot flip a charater of this type.");
             yield return null;
+        }
+
+        public void SetPriority(int priority, bool autoSortCharacterOnUI = true) {
+            this.priority = priority;
+
+            if (autoSortCharacterOnUI)
+                characterManager.SortCharacter();
         }
 
         public enum CharacterType {

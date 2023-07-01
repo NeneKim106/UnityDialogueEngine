@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DIALOGUE;
 using UnityEngine;
 
@@ -47,7 +48,7 @@ namespace CHARACTERS {
 
             Character character = CreateCharacterFromInfo(info);
 
-            characters.Add(characterName.ToLower(), character);
+            characters.Add(info.name.ToLower(), character);
 
             return character;
         }
@@ -87,6 +88,48 @@ namespace CHARACTERS {
                     return new Character_Model3D(info.name, config, info.prefab, info.rootCharacterFoler);
                 default:
                     return null;
+            }
+        }
+
+        public void SortCharacter() {
+            List<Character> activeCharaters = characters.Values.Where(c => c.root.gameObject.activeInHierarchy && c.isVisible).ToList();
+            List<Character> inactiveCharaters = characters.Values.Except(activeCharaters).ToList();
+
+            activeCharaters.Sort((a, b) => a.priority.CompareTo(b.priority));
+            activeCharaters.Concat(inactiveCharaters);
+
+            SortCharacter(activeCharaters);
+        }
+
+        public void SortCharacter(string[] chracterNames) {
+            List<Character> sortedCharacters = new List<Character>();
+
+            sortedCharacters = chracterNames
+                .Select(name => GetCharacter(name))
+                .Where(character => character != null)
+                .ToList();
+
+            List<Character> remainingCharacters = characters.Values
+                .Except(sortedCharacters)
+                .OrderBy(character => character.priority)
+                .ToList();
+
+            sortedCharacters.Reverse();
+
+            int startingPriority = remainingCharacters.Count > 0 ? remainingCharacters.Max(c => c.priority) : 0;
+            for (int i = 0; i < sortedCharacters.Count; i++) {
+                Character character = sortedCharacters[i];
+                character.SetPriority(startingPriority + i + 1, autoSortCharacterOnUI: false);
+            }
+
+            List<Character> allCharacters = remainingCharacters.Concat(sortedCharacters).ToList();
+            SortCharacter(allCharacters);
+        }
+
+        private void SortCharacter(List<Character> chracterSortingOrder) {
+            int i = 0;
+            foreach (Character character in chracterSortingOrder) {
+                character.root.SetSiblingIndex(i++);
             }
         }
 
