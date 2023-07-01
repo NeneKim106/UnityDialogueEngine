@@ -10,6 +10,7 @@ namespace CHARACTERS {
         public const bool ENABLE_ON_START = true;
         private const float UNHIGHLIGHTING_DARKEN_STRENTH = 0.65f;
         public const bool DEFAULT_ORIENTATION_IS_FACING_LEFT = true;
+        public const string ANIMATION_REFRESH_TRIGGER = "Refresh";
 
         public string name = "";
         public string displayName = "";
@@ -257,6 +258,15 @@ namespace CHARACTERS {
 
             if (autoSortCharacterOnUI)
                 characterManager.SortCharacter();
+        }
+
+        public void Animate(string animation) {
+            animator.SetTrigger(animation);
+        }
+
+        public void Animate(string animation, bool state) {
+            animator.SetBool(animation, state);
+            animator.SetTrigger(ANIMATION_REFRESH_TRIGGER);
         }
 
         public enum CharacterType {
