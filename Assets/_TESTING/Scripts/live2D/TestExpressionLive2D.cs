@@ -22,7 +22,7 @@ public class TestExpressionLive2D : MonoBehaviour {
 
         yield return new WaitForSeconds(1);
 
-        Mao.SetExpression(5);   
+        Mao.SetExpression(5);
 
         yield return new WaitForSeconds(1);
 

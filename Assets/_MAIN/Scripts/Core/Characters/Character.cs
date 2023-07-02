@@ -50,8 +50,6 @@ namespace CHARACTERS {
             displayName = name;
             this.config = config;
 
-            Debug.Log($">>> {name}'s prefab: {prefab}");
-
             if (prefab != null) {
                 RectTransform parentPanel = null;
                 switch (config.charaterType) {
@@ -283,6 +281,10 @@ namespace CHARACTERS {
         public void Animate(string animation, bool state) {
             animator.SetBool(animation, state);
             animator.SetTrigger(ANIMATION_REFRESH_TRIGGER);
+        }
+
+        public virtual void OnSort(int sortingIndex) {
+            return;
         }
 
         public enum CharacterType {

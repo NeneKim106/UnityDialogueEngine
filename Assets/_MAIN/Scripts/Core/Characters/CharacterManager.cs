@@ -134,6 +134,7 @@ namespace CHARACTERS {
             int i = 0;
             foreach (Character character in chracterSortingOrder) {
                 character.root.SetSiblingIndex(i++);
+                character.OnSort(i);
             }
         }
 
