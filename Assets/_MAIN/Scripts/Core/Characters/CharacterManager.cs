@@ -18,7 +18,11 @@ namespace CHARACTERS {
         public string characterPrefab => $"{characterRootPathFormat}/{characterPrefabNameFormat}";
 
         [SerializeField] private RectTransform _characterpanel = null;
+        [SerializeField] private RectTransform _characterpanel_live2D = null;
+        [SerializeField] private RectTransform _characterpanel_model3D = null;
         public RectTransform characterPanel => _characterpanel;
+        public RectTransform characterPanelLive2D => _characterpanel_live2D;
+        public RectTransform characterPanelModel3D => _characterpanel_model3D;
 
         private void Awake() {
             instance = this;

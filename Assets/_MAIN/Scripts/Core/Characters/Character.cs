@@ -4,6 +4,7 @@ using DIALOGUE;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace CHARACTERS {
     public abstract class Character {
@@ -49,8 +50,23 @@ namespace CHARACTERS {
             displayName = name;
             this.config = config;
 
+            Debug.Log($">>> {name}'s prefab: {prefab}");
+
             if (prefab != null) {
-                GameObject ob = Object.Instantiate(prefab, characterManager.characterPanel);
+                RectTransform parentPanel = null;
+                switch (config.charaterType) {
+                    case CharacterType.Sprite:
+                    case CharacterType.SpriteSheet:
+                        parentPanel = characterManager.characterPanel;
+                        break;
+                    case CharacterType.Live2D:
+                        parentPanel = characterManager.characterPanelLive2D;
+                        break;
+                    case CharacterType.Model3D:
+                        parentPanel = characterManager.characterPanelModel3D;
+                        break;
+                }
+                GameObject ob = Object.Instantiate(prefab, parentPanel);
                 ob.name = characterManager.FormatCharacterPath(characterManager.characterPrefabNameFormat, name);
                 ob.SetActive(true);
                 root = ob.GetComponent<RectTransform>();
