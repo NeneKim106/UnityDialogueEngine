@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DIALOGUE;
+using CHARACTERS;
 
 namespace TESTING {
     public class TestCommandFile : MonoBehaviour {
@@ -13,6 +14,10 @@ namespace TESTING {
         }
 
         void StartConversation() {
+            GameObject prefab = Resources.Load<GameObject>("Art/testImage");
+            GameObject ob = Object.Instantiate(prefab, CharacterManager.instance.characterPanel);
+            ob.name = "Image";
+
             List<string> lines = FileManager.ReadTextAsset(fileToLoad, false);
 
             DialogueSystem.instance.Say(lines);

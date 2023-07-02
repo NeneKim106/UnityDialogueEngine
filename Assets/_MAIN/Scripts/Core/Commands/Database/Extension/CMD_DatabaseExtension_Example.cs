@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using UnityEngine;
 using COMMANDS;
+using UnityEngine.UI;
+using CHARACTERS;
 
 namespace TESTING {
     public class CMD_DatabaseExtension_Example : CMD_DatabaseExtension {
@@ -67,6 +69,7 @@ namespace TESTING {
             bool left = direction.ToLower() == "left";
 
             Transform character = GameObject.Find("Image").transform;
+
             float moveSpeed = 1;
             float targetX = left ? -80 : 80;
             float currentX = character.position.x;
